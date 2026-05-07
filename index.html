@@ -1,0 +1,2567 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Roteiro Mensal · Cartório SRS</title>
+
+<!-- PWA Meta Tags -->
+<meta name="application-name" content="Cartório SRS" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Cartório SRS" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="theme-color" content="#1a1612" />
+<meta name="description" content="Roteiro mensal de tarefas e obrigações do Cartório de Registro de Imóveis de Santa Rita do Sapucaí" />
+
+<!-- Manifest inline via blob (PWA sem servidor) -->
+<link rel="manifest" id="pwa-manifest" />
+
+<!-- Ícone Apple Touch (SVG inline convertido) -->
+<link rel="apple-touch-icon" id="apple-icon" />
+
+<!-- Ícone favicon -->
+<link rel="icon" id="favicon-icon" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Paleta - tons graves de cartório, com acento âmbar */
+    --bg: #f4efe6;
+    --bg-paper: #faf6ef;
+    --ink: #1a1612;
+    --ink-soft: #4a3f33;
+    --ink-mute: #8a7d6c;
+    --line: #d9cfbe;
+    --line-soft: #ebe2d2;
+    --accent: #b8860b;
+    --accent-deep: #8b6508;
+    --accent-soft: #f0e0a8;
+    --green: #2d6a4f;
+    --green-soft: #d8e9dd;
+    --red: #9b2226;
+    --red-soft: #f3d6d4;
+    --blue: #264653;
+    --blue-soft: #d5e0e2;
+    --purple: #5a4e7c;
+    --purple-soft: #e0dbe9;
+
+    /* Tipografia */
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'Outfit', -apple-system, sans-serif;
+    --font-mono: 'DM Mono', monospace;
+
+    /* Vermelho mais saturado para atrasos */
+    --red: #c0392b;
+    --red-deep: #922b21;
+    --red-soft: #fadbd8;
+    --red-mid: #f1948a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    background-image:
+      radial-gradient(circle at 20% 0%, rgba(184,134,11,0.04) 0%, transparent 50%),
+      radial-gradient(circle at 80% 100%, rgba(38,70,83,0.04) 0%, transparent 50%);
+    color: var(--ink);
+    min-height: 100vh;
+    line-height: 1.5;
+    padding: 32px 24px;
+  }
+
+  .container {
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  /* === HEADER === */
+  header {
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 24px;
+    margin-bottom: 32px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 24px;
+    align-items: end;
+  }
+
+  .header-title {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .header-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--ink-mute);
+    font-weight: 500;
+  }
+
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(28px, 4vw, 44px);
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    color: var(--ink);
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--accent-deep);
+  }
+
+  .header-subtitle {
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin-top: 4px;
+    max-width: 540px;
+  }
+
+  .header-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-mute);
+  }
+
+  .month-display {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    line-height: 1;
+  }
+
+  .month-display .year {
+    color: var(--accent-deep);
+    font-style: italic;
+  }
+
+  .month-controls {
+    display: flex;
+    gap: 6px;
+  }
+
+  .month-btn {
+    background: var(--bg-paper);
+    border: 1px solid var(--line);
+    color: var(--ink-soft);
+    width: 28px; height: 28px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+  .month-btn:hover { background: var(--ink); color: var(--bg-paper); border-color: var(--ink); }
+
+  /* === DASHBOARD === */
+  .dashboard {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 36px;
+  }
+
+  .stat-card {
+    background: var(--bg-paper);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 18px 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--accent);
+  }
+
+  .stat-card.green::before { background: var(--green); }
+  .stat-card.red::before { background: var(--red); }
+  .stat-card.blue::before { background: var(--blue); }
+
+  .stat-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--ink-mute);
+    margin-bottom: 8px;
+  }
+
+  .stat-value {
+    font-family: var(--font-display);
+    font-size: 36px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .stat-detail {
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-top: 6px;
+  }
+
+  /* === TIMELINE DE JANELA === */
+  .timeline-section {
+    background: var(--bg-paper);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 24px;
+    margin-bottom: 36px;
+  }
+
+  .timeline-section h2 {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+  }
+
+  .timeline-section .section-desc {
+    font-size: 13px;
+    color: var(--ink-mute);
+    margin-bottom: 20px;
+  }
+
+  /* === CALENDÁRIO MENSAL === */
+  .cal-section {
+    background: var(--bg-paper);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 24px;
+    margin-bottom: 36px;
+  }
+
+  .cal-section h2 {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+  }
+
+  .cal-section .section-desc {
+    font-size: 13px;
+    color: var(--ink-mute);
+    margin-bottom: 20px;
+  }
+
+  .cal-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .cal-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-mute);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .cal-legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+  }
+
+  .cal-dow {
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-mute);
+    padding: 4px 0 8px;
+  }
+
+  .cal-dow.weekend { color: var(--red); opacity: 0.6; }
+
+  .cal-day {
+    min-height: 72px;
+    border-radius: 5px;
+    border: 1px solid var(--line-soft);
+    background: var(--bg);
+    padding: 5px 6px;
+    position: relative;
+    transition: all 0.12s;
+    cursor: default;
+  }
+
+  .cal-day.empty {
+    background: transparent;
+    border-color: transparent;
+  }
+
+  .cal-day.today {
+    border-color: var(--accent);
+    background: #fffdf5;
+    box-shadow: 0 0 0 2px rgba(184,134,11,0.18);
+  }
+
+  .cal-day.weekend-day {
+    background: #f8f5f0;
+  }
+
+  .cal-day.feriado {
+    background: #f5f0f8;
+  }
+
+  .cal-day-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .cal-day.today .cal-day-num {
+    background: var(--accent);
+    color: white;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+  }
+
+  .cal-day.weekend-day .cal-day-num { color: var(--ink-mute); }
+
+  .cal-chips {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .cal-chip {
+    font-family: var(--font-mono);
+    font-size: 8.5px;
+    font-weight: 600;
+    padding: 2px 4px;
+    border-radius: 2px;
+    color: white;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    transition: opacity 0.12s;
+    line-height: 1.3;
+  }
+
+  .cal-chip:hover { opacity: 0.8; }
+  .cal-chip.done-chip { opacity: 0.4; text-decoration: line-through; }
+
+  .cal-chip.tfj-chip {
+    background: var(--red-deep);
+    letter-spacing: 0.04em;
+  }
+
+  .cal-feriado-tag {
+    font-family: var(--font-mono);
+    font-size: 7.5px;
+    color: var(--purple);
+    opacity: 0.8;
+    line-height: 1.2;
+    margin-top: 2px;
+  }
+
+  .cal-more {
+    font-family: var(--font-mono);
+    font-size: 8px;
+    color: var(--ink-mute);
+    margin-top: 2px;
+  }
+
+  /* === FILTROS === */
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+    align-items: center;
+  }
+
+  .filter-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--ink-mute);
+    margin-right: 8px;
+  }
+
+  .filter-chip {
+    background: var(--bg-paper);
+    border: 1px solid var(--line);
+    color: var(--ink-soft);
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 12px;
+    cursor: pointer;
+    font-weight: 500;
+    font-family: var(--font-body);
+    transition: all 0.15s;
+  }
+  .filter-chip:hover { border-color: var(--ink-soft); }
+  .filter-chip.active {
+    background: var(--ink);
+    color: var(--bg-paper);
+    border-color: var(--ink);
+  }
+
+  .add-btn {
+    margin-left: auto;
+    background: var(--ink);
+    color: var(--bg-paper);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-body);
+    transition: background 0.15s;
+  }
+  .add-btn:hover { background: var(--accent-deep); }
+
+  /* === TAREFAS === */
+  .task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .task {
+    background: var(--bg-paper);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 16px 18px;
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    gap: 16px;
+    align-items: center;
+    transition: all 0.15s;
+    position: relative;
+  }
+
+  .task.done {
+    opacity: 0.5;
+    background: var(--line-soft);
+  }
+  .task.done .task-title { text-decoration: line-through; color: var(--ink-mute); }
+
+  /* EM JANELA — âmbar sutil */
+  .task.due-soon {
+    border-left: 4px solid var(--accent);
+    background: linear-gradient(to right, #fef9ec 0%, var(--bg-paper) 18%);
+  }
+
+  /* ATRASADO — vermelho intenso, impossível ignorar */
+  .task.urgent {
+    border: 2px solid var(--red);
+    border-left: 6px solid var(--red-deep);
+    background: linear-gradient(135deg, #fdf0ef 0%, #fef9f9 60%, var(--bg-paper) 100%);
+    box-shadow: 0 4px 20px rgba(192,57,43,0.15), 0 0 0 1px rgba(192,57,43,0.08);
+    animation: pulseOverdue 2.5s ease-in-out infinite;
+  }
+
+  @keyframes pulseOverdue {
+    0%, 100% { box-shadow: 0 4px 20px rgba(192,57,43,0.15), 0 0 0 1px rgba(192,57,43,0.08); }
+    50%       { box-shadow: 0 4px 28px rgba(192,57,43,0.30), 0 0 0 2px rgba(192,57,43,0.15); }
+  }
+
+  .task.urgent .task-title { color: var(--red-deep); }
+  .task.urgent .task-checkbox { border-color: var(--red); }
+  .task.urgent .task-checkbox:hover { border-color: var(--red-deep); background: var(--red-soft); }
+
+  .task-checkbox {
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--ink-soft);
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .task-checkbox:hover { border-color: var(--accent); }
+  .task.done .task-checkbox {
+    background: var(--green);
+    border-color: var(--green);
+    color: white;
+  }
+  .task-checkbox::after {
+    content: '✓';
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .task.done .task-checkbox::after { opacity: 1; }
+
+  .task-content {
+    min-width: 0;
+  }
+
+  .task-meta-top {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 4px;
+    flex-wrap: wrap;
+  }
+
+  .category-tag {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 3px;
+  }
+
+  .category-tag.rh { background: var(--purple-soft); color: var(--purple); }
+  .category-tag.fin { background: var(--green-soft); color: var(--green); }
+  .category-tag.legal { background: var(--blue-soft); color: var(--blue); }
+  .category-tag.adm { background: var(--accent-soft); color: var(--accent-deep); }
+
+  .task-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+
+  .task-desc {
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+
+  .task-window {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-mute);
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .task-window strong {
+    display: block;
+    font-size: 13px;
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .task-actions {
+    display: flex;
+    gap: 4px;
+  }
+
+  .icon-btn {
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--ink-mute);
+    width: 28px; height: 28px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    transition: all 0.15s;
+  }
+  .icon-btn:hover { border-color: var(--ink); color: var(--ink); background: var(--bg); }
+  .icon-btn.delete:hover { border-color: var(--red); color: var(--red); }
+
+  .task.expanded .task-detail-area {
+    grid-column: 1 / -1;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--line);
+    display: block;
+  }
+
+  .task-detail-area {
+    display: none;
+  }
+
+  .detail-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 8px;
+    font-size: 13px;
+  }
+  .detail-row:last-child { margin-bottom: 0; }
+
+  .detail-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-mute);
+    width: 120px;
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+
+  .detail-value {
+    color: var(--ink-soft);
+    flex: 1;
+  }
+
+  .notes-textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: var(--bg);
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--ink);
+    resize: vertical;
+    min-height: 60px;
+  }
+  .notes-textarea:focus { outline: none; border-color: var(--accent); }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--ink-mute);
+    font-size: 14px;
+    font-style: italic;
+    background: var(--bg-paper);
+    border: 1px dashed var(--line);
+    border-radius: 6px;
+  }
+
+  /* === MODAL === */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(26,22,18,0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--bg-paper);
+    border-radius: 8px;
+    width: 100%;
+    max-width: 560px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border: 1px solid var(--line);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  }
+
+  .modal-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .modal-header h2 {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .modal-close {
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    color: var(--ink-mute);
+    width: 30px; height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+  }
+  .modal-close:hover { color: var(--ink); background: var(--line-soft); }
+
+  .modal-body {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .form-group label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ink-mute);
+    font-weight: 600;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: var(--bg);
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .form-hint {
+    font-size: 11px;
+    color: var(--ink-mute);
+    font-style: italic;
+  }
+
+  .modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .btn {
+    padding: 9px 18px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid var(--line);
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    transition: all 0.15s;
+  }
+  .btn:hover { border-color: var(--ink); }
+  .btn.primary {
+    background: var(--ink);
+    color: var(--bg-paper);
+    border-color: var(--ink);
+  }
+  .btn.primary:hover { background: var(--accent-deep); border-color: var(--accent-deep); }
+
+  /* === FOOTER ACTIONS === */
+  .footer-actions {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-mute);
+  }
+
+  .footer-buttons {
+    display: flex;
+    gap: 8px;
+  }
+
+  .text-btn {
+    background: none;
+    border: none;
+    color: var(--ink-soft);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .text-btn:hover { color: var(--accent-deep); }
+
+  /* === BANNER DE ALERTA GLOBAL === */
+  .alert-banner {
+    display: none;
+    background: var(--red-deep);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 6px;
+    margin-bottom: 24px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    align-items: center;
+    gap: 12px;
+    animation: pulseOverdue 2.5s ease-in-out infinite;
+  }
+  .alert-banner.show { display: flex; }
+  .alert-banner .banner-icon { font-size: 20px; }
+  .alert-banner .banner-text { flex: 1; }
+  .alert-banner .banner-count {
+    background: rgba(255,255,255,0.25);
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .tfj-period.overdue-period {
+    border: 2px solid var(--red);
+    border-left: 5px solid var(--red-deep);
+    background: linear-gradient(135deg, #fdf0ef 0%, var(--bg-paper) 100%);
+    animation: pulseOverdue 2.5s ease-in-out infinite;
+  }
+
+  /* === PAINEL TFJ === */
+  .tfj-section {
+    background: var(--bg-paper);
+    border: 2px solid var(--red);
+    border-radius: 6px;
+    padding: 24px;
+    margin-bottom: 36px;
+    position: relative;
+  }
+
+  .tfj-section::before {
+    content: 'OBRIGAÇÃO PRIORITÁRIA';
+    position: absolute;
+    top: -11px; left: 20px;
+    background: var(--red);
+    color: white;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    padding: 3px 10px;
+    border-radius: 3px;
+  }
+
+  .tfj-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .tfj-header-left h2 {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+
+  .tfj-header-left p {
+    font-size: 13px;
+    color: var(--ink-mute);
+  }
+
+  .tfj-progress {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+
+  .tfj-progress-bar {
+    width: 120px;
+    height: 6px;
+    background: var(--line);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .tfj-progress-fill {
+    height: 100%;
+    background: var(--green);
+    border-radius: 3px;
+    transition: width 0.3s;
+  }
+
+  .tfj-periods {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+
+  .tfj-period {
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 14px 16px;
+    background: var(--bg);
+    position: relative;
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+
+  .tfj-period:hover { border-color: var(--ink-soft); }
+
+  .tfj-period.active-period {
+    border-color: var(--accent);
+    background: linear-gradient(135deg, var(--accent-soft) 0%, var(--bg-paper) 100%);
+    box-shadow: 0 2px 8px rgba(184,134,11,0.12);
+  }
+
+  .tfj-period.done-period {
+    opacity: 0.55;
+    background: var(--line-soft);
+  }
+
+  .tfj-period.done-period .period-num { text-decoration: line-through; }
+
+  .tfj-period.overdue-period {
+    border-color: var(--red);
+    background: linear-gradient(135deg, var(--red-soft) 0%, var(--bg-paper) 100%);
+  }
+
+  .period-num {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ink-mute);
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .period-status-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--line);
+  }
+
+  .tfj-period.active-period .period-status-dot { background: var(--accent); }
+  .tfj-period.done-period .period-status-dot { background: var(--green); }
+  .tfj-period.overdue-period .period-status-dot { background: var(--red); }
+
+  .period-competencia {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--ink);
+    margin-bottom: 2px;
+    letter-spacing: -0.01em;
+  }
+
+  .period-vencimento {
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-bottom: 12px;
+  }
+
+  .period-vencimento strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .period-check-btn {
+    width: 100%;
+    padding: 7px;
+    border-radius: 4px;
+    border: 1px solid var(--line);
+    background: var(--bg-paper);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-transform: uppercase;
+  }
+  .period-check-btn:hover { border-color: var(--green); color: var(--green); background: var(--green-soft); }
+  .tfj-period.done-period .period-check-btn {
+    background: var(--green);
+    color: white;
+    border-color: var(--green);
+  }
+
+  .tfj-note-area {
+    margin-top: 10px;
+  }
+
+  .tfj-note-area input {
+    width: 100%;
+    padding: 5px 8px;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    background: var(--bg);
+    font-family: var(--font-body);
+    font-size: 11px;
+    color: var(--ink);
+  }
+  .tfj-note-area input:focus { outline: none; border-color: var(--accent); }
+
+  .tfj-alert {
+    margin-top: 16px;
+    padding: 10px 14px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    display: none;
+  }
+
+  .tfj-alert.show { display: block; }
+  .tfj-alert.warn { background: var(--accent-soft); color: var(--accent-deep); border-left: 3px solid var(--accent); }
+  .tfj-alert.danger { background: var(--red-soft); color: var(--red); border-left: 3px solid var(--red); }
+  .tfj-alert.ok { background: var(--green-soft); color: var(--green); border-left: 3px solid var(--green); }
+
+  /* === PWA / MOBILE === */
+  :root {
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  body {
+    padding-bottom: calc(72px + var(--safe-bottom));
+  }
+
+  /* Bottom navigation bar para mobile */
+  .bottom-nav {
+    display: none;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: calc(60px + var(--safe-bottom));
+    padding-bottom: var(--safe-bottom);
+    background: var(--ink);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    z-index: 50;
+    align-items: flex-start;
+    justify-content: space-around;
+    padding-top: 8px;
+  }
+
+  .bottom-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    color: rgba(255,255,255,0.45);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 4px 12px;
+    border-radius: 8px;
+    transition: all 0.15s;
+    border: none;
+    background: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .bottom-nav-item.active { color: var(--accent); }
+  .bottom-nav-item:active { background: rgba(255,255,255,0.08); }
+
+  .bottom-nav-icon {
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  /* Seções controláveis por tab mobile */
+  .mobile-section { transition: all 0.2s; }
+
+  /* Banner de instalação PWA */
+  .pwa-install-banner {
+    display: none;
+    background: var(--ink);
+    color: var(--bg-paper);
+    padding: 14px 18px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+  }
+  .pwa-install-banner.show { display: flex; }
+  .pwa-install-banner .install-icon { font-size: 24px; flex-shrink: 0; }
+  .pwa-install-banner .install-text { flex: 1; line-height: 1.4; }
+  .pwa-install-banner .install-text strong { display: block; margin-bottom: 2px; }
+  .pwa-install-banner .install-text span { font-size: 12px; opacity: 0.7; }
+  .install-btn {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: var(--font-body);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .install-dismiss {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.5);
+    font-size: 18px;
+    cursor: pointer;
+    padding: 4px;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 768px) {
+    body { padding: 16px 12px; padding-bottom: calc(72px + var(--safe-bottom)); }
+    header { grid-template-columns: 1fr; gap: 16px; }
+    .header-meta { align-items: flex-start; flex-direction: row; justify-content: space-between; align-items: center; }
+    .month-display { font-size: 24px; }
+    .dashboard { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .stat-card { padding: 14px 16px; }
+    .stat-value { font-size: 28px; }
+    .tfj-periods { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .tfj-period { padding: 12px; }
+    .cal-day { min-height: 56px; padding: 3px 4px; }
+    .cal-chip { font-size: 7.5px; padding: 1px 3px; }
+    .cal-day-num { font-size: 10px; }
+    .task { grid-template-columns: auto 1fr; gap: 10px; }
+    .task-window { grid-column: 2; text-align: left; margin-top: 4px; }
+    .task-actions { grid-column: 2; justify-content: flex-start; }
+    .filters { gap: 6px; }
+    .filter-chip { padding: 5px 10px; font-size: 11px; }
+    .add-btn { padding: 7px 12px; font-size: 12px; }
+    .bottom-nav { display: flex; }
+    h1 { font-size: 26px; }
+    .tfj-section { padding: 16px; }
+    .cal-section { padding: 16px; }
+  }
+
+  @media (max-width: 480px) {
+    .cal-grid { gap: 2px; }
+    .cal-day { min-height: 48px; }
+    .cal-dow { font-size: 9px; padding-bottom: 4px; }
+    .dashboard { grid-template-columns: repeat(2, 1fr); }
+    .tfj-periods { grid-template-columns: 1fr 1fr; }
+    h1 { font-size: 22px; }
+  }
+
+  /* === RESPONSIVE === */
+  @media (max-width: 800px) {
+    body { padding: 20px 16px; }
+    header { grid-template-columns: 1fr; }
+    .header-meta { align-items: flex-start; }
+    .dashboard { grid-template-columns: repeat(2, 1fr); }
+    .task { grid-template-columns: auto 1fr; }
+    .task-window { grid-column: 2; text-align: left; margin-top: 6px; }
+    .task-actions { grid-column: 2; justify-content: flex-start; }
+    .tfj-periods { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Banner de instalação PWA -->
+  <div class="pwa-install-banner" id="installBanner">
+    <span class="install-icon">📲</span>
+    <div class="install-text">
+      <strong>Instalar como app</strong>
+      <span>Acesse da tela inicial, funciona offline</span>
+    </div>
+    <button class="install-btn" id="installBtn">Instalar</button>
+    <button class="install-dismiss" onclick="document.getElementById('installBanner').classList.remove('show')">×</button>
+  </div>
+
+  <div class="alert-banner" id="alertBanner">
+    <span class="banner-icon">🚨</span>
+    <span class="banner-text" id="alertBannerText">Há tarefas com prazo vencido neste mês.</span>
+    <span class="banner-count" id="alertBannerCount"></span>
+  </div>
+
+  <header>
+    <div class="header-title">
+      <span class="header-eyebrow">Cartório de Registro de Imóveis · Santa Rita do Sapucaí · CNS 05.933-7</span>
+      <h1>Roteiro <em>mensal</em> de tarefas</h1>
+      <p class="header-subtitle">Rotinas administrativas, contábeis, de RH e obrigações legais do Oficial. Construído iterativamente conforme a execução real de cada mês.</p>
+    </div>
+    <div class="header-meta">
+      <div class="month-display">
+        <span id="monthName">Maio</span>·<span class="year" id="monthYear">2026</span>
+      </div>
+      <div class="month-controls">
+        <button class="month-btn" onclick="changeMonth(-1)">‹</button>
+        <button class="month-btn" onclick="goToToday()">●</button>
+        <button class="month-btn" onclick="changeMonth(1)">›</button>
+      </div>
+      <span id="todayLabel">—</span>
+    </div>
+  </header>
+
+  <!-- DASHBOARD -->
+  <div class="dashboard" id="dashSection">
+    <div class="stat-card">
+      <div class="stat-label">Tarefas no mês</div>
+      <div class="stat-value" id="statTotal">0</div>
+      <div class="stat-detail" id="statTotalDetail">cadastradas</div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-label">Concluídas</div>
+      <div class="stat-value" id="statDone">0</div>
+      <div class="stat-detail" id="statDoneDetail">— do total</div>
+    </div>
+    <div class="stat-card red">
+      <div class="stat-label">Atrasadas</div>
+      <div class="stat-value" id="statOverdue">0</div>
+      <div class="stat-detail">passaram da janela</div>
+    </div>
+    <div class="stat-card blue">
+      <div class="stat-label">Próximas (7 dias)</div>
+      <div class="stat-value" id="statSoon">0</div>
+      <div class="stat-detail">dentro da janela</div>
+    </div>
+  </div>
+
+  <!-- PAINEL TFJ -->
+  <section class="tfj-section" id="tfjSection">
+      <div class="tfj-header-left">
+        <h2>TFJ — Taxa de Fiscalização Judiciária</h2>
+        <p>4 períodos mensais de competência com vencimentos escalonados · Pagamento ao Poder Judiciário</p>
+      </div>
+      <div class="tfj-progress">
+        <span id="tfjProgressLabel">0/4 pagos</span>
+        <div class="tfj-progress-bar">
+          <div class="tfj-progress-fill" id="tfjProgressFill" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+    <div class="tfj-periods" id="tfjPeriods">
+      <!-- gerado por JS -->
+    </div>
+    <div class="tfj-alert" id="tfjAlert"></div>
+  </section>
+
+  <!-- CALENDÁRIO -->
+  <section class="cal-section" id="calSection">
+    <h2>Calendário do mês</h2>
+    <p class="section-desc">Tarefas e obrigações posicionadas nos dias de vencimento. Clique em uma tarefa para marcá-la como paga/concluída.</p>
+    <div class="cal-legend">
+      <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#264653"></div> Início do mês</div>
+      <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#2d6a4f"></div> RH/Trabalhista</div>
+      <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#5a4e7c"></div> Fim do mês</div>
+      <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#b8860b"></div> Financeiro</div>
+      <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#c0392b"></div> TFJ</div>
+      <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--line);border:1px solid var(--line)"></div> Feriado/FDS</div>
+    </div>
+    <div class="cal-grid" id="calGrid"></div>
+  </section>
+
+  <!-- FILTROS -->
+  <div class="filters" id="filterSection">
+    <span class="filter-label">Categoria</span>
+    <button class="filter-chip active" data-filter="all">Todas</button>
+    <button class="filter-chip" data-filter="rh">RH/Pessoal</button>
+    <button class="filter-chip" data-filter="fin">Financeiro</button>
+    <button class="filter-chip" data-filter="legal">Legal/CNJ</button>
+    <button class="filter-chip" data-filter="adm">Administrativo</button>
+    <button class="add-btn" onclick="openModal()">＋ Nova tarefa</button>
+  </div>
+
+  <!-- LISTA DE TAREFAS -->
+  <div class="task-list" id="taskListSection" style="margin-bottom:0">
+    <div id="taskList"></div>
+  </div>
+
+  <!-- AÇÕES DE FOOTER -->
+  <div class="footer-actions">
+    <span id="storageInfo">Dados salvos automaticamente neste navegador.</span>
+    <div class="footer-buttons">
+      <button class="text-btn" onclick="resetMonthChecks()">Resetar marcações do mês</button>
+      <button class="text-btn" onclick="exportData()">Exportar JSON</button>
+      <button class="text-btn" onclick="importData()">Importar</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- MODAL DE NOVA TAREFA -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modalTitle">Nova tarefa</h2>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="taskId" />
+      <div class="form-group">
+        <label>Título da tarefa</label>
+        <input type="text" id="taskInputTitle" placeholder="Ex: Pagamento Pluxee — vale alimentação" />
+      </div>
+      <div class="form-group">
+        <label>Descrição / observações</label>
+        <textarea id="taskInputDesc" rows="3" placeholder="Detalhes, valores, sistema usado..."></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Categoria</label>
+          <select id="taskInputCategory">
+            <option value="rh">RH/Pessoal</option>
+            <option value="fin">Financeiro/Contábil</option>
+            <option value="legal">Obrigações Legais</option>
+            <option value="adm">Gestão/Administrativo</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Mês de referência</label>
+          <select id="taskInputRefMonth">
+            <option value="anterior">Mês anterior</option>
+            <option value="atual" selected>Mês atual</option>
+            <option value="proximo">Próximo mês</option>
+          </select>
+          <span class="form-hint">Útil ex: levantar coparticipação de março</span>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Janela inicial (dias antes do fim do mês)</label>
+          <input type="number" id="taskInputStart" placeholder="Ex: 6" min="0" max="31" />
+          <span class="form-hint">0 = último dia do mês</span>
+        </div>
+        <div class="form-group">
+          <label>Janela final (dias antes do fim do mês)</label>
+          <input type="number" id="taskInputEnd" placeholder="Ex: 2" min="0" max="31" />
+          <span class="form-hint">Ex: até 2 dias antes do fim</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>OU - dia fixo do mês (opcional)</label>
+        <input type="number" id="taskInputFixedDay" placeholder="Ex: 15 (dia 15 de cada mês)" min="1" max="31" />
+        <span class="form-hint">Se preenchido, ignora os campos de janela acima</span>
+      </div>
+      <div class="form-group">
+        <label>Sistema/local de execução</label>
+        <input type="text" id="taskInputSystem" placeholder="Ex: Site Pluxee, Portal Unimed, e-mail contadora..." />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal()">Cancelar</button>
+      <button class="btn primary" onclick="saveTask()">Salvar</button>
+    </div>
+  </div>
+</div><!-- fim modal-overlay -->
+
+<!-- Bottom Navigation (mobile) -->
+<nav class="bottom-nav" id="bottomNav">
+  <button class="bottom-nav-item active" id="nav-inicio" onclick="mobileNav('inicio')">
+    <span class="bottom-nav-icon">📅</span>
+    <span>Calendário</span>
+  </button>
+  <button class="bottom-nav-item" id="nav-tfj" onclick="mobileNav('tfj')">
+    <span class="bottom-nav-icon">⚖️</span>
+    <span>TFJ</span>
+  </button>
+  <button class="bottom-nav-item" id="nav-tarefas" onclick="mobileNav('tarefas')">
+    <span class="bottom-nav-icon">✓</span>
+    <span>Tarefas</span>
+  </button>
+  <button class="bottom-nav-item" id="nav-mais" onclick="openModal()">
+    <span class="bottom-nav-icon">＋</span>
+    <span>Nova</span>
+  </button>
+</nav>
+
+<script>
+  // ================================
+  // ESTADO
+  // ================================
+  const STORAGE_KEY = 'cartorio_tarefas_mensais_v1';
+  const CHECKS_KEY = 'cartorio_tarefas_checks_v1';
+
+  // Estrutura de tarefa:
+  // { id, title, desc, category, system, startBefore, endBefore, fixedDay, refMonth, createdAt }
+
+  let state = {
+    tasks: [],
+    checks: {}, // { "2026-05_taskId": true }
+    notes: {},  // { "2026-05_taskId": "anotações" }
+    viewYear: 0,
+    viewMonth: 0, // 0-indexed
+    activeFilter: 'all'
+  };
+
+  const today = new Date();
+  state.viewYear = today.getFullYear();
+  state.viewMonth = today.getMonth();
+
+  // ================================
+  // SEED INICIAL — tarefas que você já descreveu
+  // ================================
+  const SEED_TASKS = [
+    {
+      id: 't_pluxee',
+      title: 'Pagamento Pluxee — Vale Alimentação',
+      desc: 'Realizar pagamento do vale alimentação dos colaboradores via portal Pluxee. Conferir lista de beneficiários ativos e valor por colaborador antes de processar.',
+      category: 'rh',
+      system: 'Portal Pluxee',
+      startBefore: 6,
+      endBefore: 2,
+      fixedDay: null,
+      refMonth: 'atual',
+      createdAt: new Date().toISOString()
+    },
+    {
+      id: 't_unimed',
+      title: 'Levantamento Unimed — Coparticipação',
+      desc: 'Levantar valores de coparticipação utilizados pelos colaboradores no mês anterior e enviar à contadora para inclusão dos descontos no holerite.',
+      category: 'rh',
+      system: 'Portal Unimed → e-mail contadora',
+      startBefore: 6,
+      endBefore: 2,
+      fixedDay: null,
+      refMonth: 'anterior',
+      createdAt: new Date().toISOString()
+    },
+    {
+      id: 't_recompe',
+      title: 'Pagamento Recompe',
+      desc: 'Fundo de compensação de cartórios deficitários e de atos gratuitos. Pagamento obrigatório até o dia 05 de cada mês.',
+      category: 'fin',
+      system: '',
+      startBefore: null,
+      endBefore: null,
+      fixedDay: 5,
+      refMonth: 'atual',
+      createdAt: new Date().toISOString()
+    },
+    {
+      id: 't_doi',
+      title: 'Envio da DOI — Declaração de Operações Imobiliárias',
+      desc: 'Envio da DOI referente aos atos do mês anterior. Prazo legal: último dia do mês subsequente. Prática adotada: até dia 05 de cada mês, junto com Recompe e comunicações às Prefeituras. Gerada pelo Asgard/VHL.',
+      category: 'legal',
+      system: 'Asgard/VHL → Sintegra/RFB',
+      startBefore: null,
+      endBefore: null,
+      fixedDay: 5,
+      refMonth: 'anterior',
+      createdAt: new Date().toISOString()
+    },
+    {
+      id: 't_prefeituras',
+      title: 'Comunicação de Transferências às Prefeituras',
+      desc: 'Envio das comunicações de transferências imobiliárias às Prefeituras, utilizando o mesmo arquivo base da DOI. Realizado pelo portal da ONR. Prazo prático: até dia 05 de cada mês.',
+      category: 'legal',
+      system: 'ONR (portal web)',
+      startBefore: null,
+      endBefore: null,
+      fixedDay: 5,
+      refMonth: 'anterior',
+      createdAt: new Date().toISOString()
+    },
+    {
+      id: 't_carneleao',
+      title: 'Recolhimento do Carnê-Leão',
+      desc: 'Recolhimento do IRPF mensal (carnê-leão) sobre os rendimentos do Oficial. Prazo legal: último dia do mês subsequente ao de apuração. Gerar DARF pelo e-CAC / Carnê-Leão web e recolher até o vencimento.',
+      category: 'fin',
+      system: 'e-CAC / Carnê-Leão web (Receita Federal)',
+      startBefore: 0,
+      endBefore: 0,
+      fixedDay: null,
+      refMonth: 'anterior',
+      createdAt: new Date().toISOString()
+    },
+    {
+      id: 't_fic_srei',
+      title: 'Recolhimento FIC SREI ONR',
+      desc: 'Contribuição mensal à central nacional do Registro de Imóveis (SREI/ONR). Prazo legal: último dia do mês subsequente. Prática adotada: até dia 05, junto com o bloco de início de mês.',
+      category: 'fin',
+      system: 'ONR (portal web)',
+      startBefore: null,
+      endBefore: null,
+      fixedDay: 5,
+      refMonth: 'anterior',
+      createdAt: new Date().toISOString()
+    },
+    {
+      id: 't_fic_onrtpdj',
+      title: 'Recolhimento FIC ONR TPDJ',
+      desc: 'Contribuição mensal à central nacional do RTD e Pessoas Jurídicas (TPDJ/ONR). Prazo legal: último dia do mês subsequente. Prática adotada: até dia 05, junto com o bloco de início de mês.',
+      category: 'fin',
+      system: 'RTDBrasil (rtdbrasil.org.br)',
+      startBefore: null,
+      endBefore: null,
+      fixedDay: 5,
+      refMonth: 'anterior',
+      createdAt: new Date().toISOString()
+    },
+    {
+      id: 't_dap',
+      title: 'Envio da DAP — Sisnor TJMG',
+      desc: 'Envio do Demonstrativo de Arrecadação e Produtividade (DAP) referente ao mês anterior para o Sisnor/TJMG. Obrigação de prestação de contas ao Tribunal de Justiça de Minas Gerais.',
+      category: 'legal',
+      system: 'Sisnor (TJMG)',
+      startBefore: null,
+      endBefore: null,
+      fixedDay: 5,
+      refMonth: 'anterior',
+      createdAt: new Date().toISOString()
+    },
+    {
+      id: 't_inss',
+      title: 'Recolhimento INSS — Funcionários',
+      desc: 'Pagamento da GPS (contribuição previdenciária) dos funcionários referente ao mês anterior. Vencimento: dia 20. Se cair em fim de semana ou feriado, antecipa para o último dia útil anterior.',
+      category: 'rh',
+      system: 'SIGEPE / GPS (Receita Federal)',
+      startBefore: null,
+      endBefore: null,
+      fixedDay: 20,
+      fixedDayRule: 'anticipate', // antecipa em fds/feriado
+      refMonth: 'anterior',
+      createdAt: new Date().toISOString()
+    },
+    {
+      id: 't_irpf_func',
+      title: 'Recolhimento IRPF — Funcionários (DARF)',
+      desc: 'Pagamento do DARF de IRPF retido na fonte sobre os salários dos funcionários. Vencimento: dia 20. Se cair em fim de semana ou feriado, antecipa para o último dia útil anterior.',
+      category: 'rh',
+      system: 'e-CAC / SICALC (Receita Federal)',
+      startBefore: null,
+      endBefore: null,
+      fixedDay: 20,
+      fixedDayRule: 'anticipate',
+      refMonth: 'anterior',
+      createdAt: new Date().toISOString()
+    },
+    {
+      id: 't_fgts',
+      title: 'Recolhimento FGTS — Funcionários',
+      desc: 'Pagamento do FGTS dos funcionários referente ao mês anterior via SEFIP/FGTS Digital. Vencimento: dia 20. Se cair em fim de semana ou feriado, antecipa para o último dia útil anterior.',
+      category: 'rh',
+      system: 'FGTS Digital (fgts.economia.gov.br)',
+      startBefore: null,
+      endBefore: null,
+      fixedDay: 20,
+      fixedDayRule: 'anticipate',
+      refMonth: 'anterior',
+      createdAt: new Date().toISOString()
+    }
+  ];
+
+  // ================================
+  // PERSISTÊNCIA
+  // ================================
+  function loadState() {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        state.tasks = JSON.parse(saved);
+        // Migração: injeta tarefas seed que ainda não existam
+        let changed = false;
+        SEED_TASKS.forEach(seed => {
+          if (!state.tasks.find(t => t.id === seed.id)) {
+            state.tasks.push(seed);
+            changed = true;
+          }
+        });
+        if (changed) saveState();
+      } else {
+        state.tasks = [...SEED_TASKS];
+        saveState();
+      }
+      const checks = localStorage.getItem(CHECKS_KEY);
+      if (checks) {
+        const parsed = JSON.parse(checks);
+        state.checks = parsed.checks || {};
+        state.notes = parsed.notes || {};
+      }
+    } catch(e) {
+      console.error('Erro ao carregar:', e);
+      state.tasks = [...SEED_TASKS];
+    }
+  }
+
+  function saveState() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state.tasks));
+    localStorage.setItem(CHECKS_KEY, JSON.stringify({checks: state.checks, notes: state.notes}));
+  }
+
+  // ================================
+  // HELPERS DE DATA
+  // ================================
+  const MONTHS_PT = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+  function getDaysInMonth(year, month) {
+    return new Date(year, month + 1, 0).getDate();
+  }
+
+  function isCurrentMonth() {
+    return state.viewYear === today.getFullYear() && state.viewMonth === today.getMonth();
+  }
+
+  function getTodayDay() {
+    return today.getDate();
+  }
+
+  function monthKey(year, month) {
+    return `${year}-${String(month+1).padStart(2,'0')}`;
+  }
+
+  function checkKey(taskId) {
+    return `${monthKey(state.viewYear, state.viewMonth)}_${taskId}`;
+  }
+
+  // Feriados nacionais fixos (dia/mês) — antecipam vencimento do dia 20
+  const FERIADOS_FIXOS = [
+    [1,1],[21,4],[1,5],[7,9],[12,10],[2,11],[15,11],[25,12]
+  ];
+
+  function isFeriadoNacional(date) {
+    const d = date.getDate(), m = date.getMonth() + 1;
+    return FERIADOS_FIXOS.some(([fd, fm]) => fd === d && fm === m);
+  }
+
+  // Dado um dia do mês, retrocede até o último dia útil (não fds, não feriado)
+  function anteriorDiaUtil(year, month, dia) {
+    let d = new Date(year, month, dia);
+    while (true) {
+      const dow = d.getDay(); // 0=dom, 6=sab
+      if (dow !== 0 && dow !== 6 && !isFeriadoNacional(d)) break;
+      d.setDate(d.getDate() - 1);
+    }
+    return d.getDate();
+  }
+
+  // Calcula a janela de uma tarefa em dias do mês visualizado
+  function getTaskWindow(task) {
+    const lastDay = getDaysInMonth(state.viewYear, state.viewMonth);
+
+    // Tarefa com antecipação de fds/feriado (ex: INSS, IRPF, FGTS)
+    if (task.fixedDay && task.fixedDayRule === 'anticipate') {
+      const diaEfetivo = anteriorDiaUtil(state.viewYear, state.viewMonth, task.fixedDay);
+      return { start: diaEfetivo, end: diaEfetivo, fixed: true, lastDay: false, anticipated: diaEfetivo !== task.fixedDay, nominalDay: task.fixedDay };
+    }
+
+    if (task.fixedDay) {
+      return { start: task.fixedDay, end: task.fixedDay, fixed: true, lastDay: false };
+    }
+    // startBefore=0 e endBefore=0 → último dia do mês
+    if (task.startBefore === 0 && task.endBefore === 0) {
+      return { start: lastDay, end: lastDay, fixed: true, lastDay: true };
+    }
+    const start = lastDay - (task.startBefore || 0);
+    const end = lastDay - (task.endBefore || 0);
+    return { start: Math.max(1, start), end: Math.max(1, end), fixed: false, lastDay: false };
+  }
+
+  function getTaskStatus(task) {
+    const isDone = state.checks[checkKey(task.id)];
+    if (isDone) return 'done';
+    if (!isCurrentMonth()) return 'normal';
+    const w = getTaskWindow(task);
+    const td = getTodayDay();
+    if (td > w.end) return 'overdue';
+    if (td >= w.start && td <= w.end) return 'urgent';
+    if (w.start - td <= 7) return 'soon';
+    return 'normal';
+  }
+
+  // ================================
+  // RENDER
+  // ================================
+  const CATEGORY_LABELS = {
+    rh: 'RH/Pessoal',
+    fin: 'Financeiro',
+    legal: 'Legal/CNJ',
+    adm: 'Administrativo'
+  };
+
+  const CATEGORY_COLORS = {
+    rh: '#5a4e7c',
+    fin: '#2d6a4f',
+    legal: '#264653',
+    adm: '#b8860b'
+  };
+
+  function renderHeader() {
+    document.getElementById('monthName').textContent = MONTHS_PT[state.viewMonth];
+    document.getElementById('monthYear').textContent = state.viewYear;
+
+    const dateOpts = { weekday: 'long', day: 'numeric', month: 'long' };
+    document.getElementById('todayLabel').textContent =
+      'hoje · ' + today.toLocaleDateString('pt-BR', dateOpts);
+  }
+
+  function renderDashboard() {
+    const total = state.tasks.length;
+    let done = 0, overdue = 0, soon = 0;
+    state.tasks.forEach(t => {
+      const s = getTaskStatus(t);
+      if (s === 'done') done++;
+      else if (s === 'overdue') overdue++;
+      else if (s === 'urgent' || s === 'soon') soon++;
+    });
+
+    // Conta também períodos TFJ atrasados
+    let tfjOverdue = 0;
+    if (isCurrentMonth()) {
+      TFJ_PERIODS.forEach(p => {
+        if (getTfjPeriodStatus(p) === 'overdue') tfjOverdue++;
+      });
+    }
+
+    const totalOverdue = overdue + tfjOverdue;
+
+    document.getElementById('statTotal').textContent = total;
+    document.getElementById('statTotalDetail').textContent = total === 1 ? 'cadastrada' : 'cadastradas';
+    document.getElementById('statDone').textContent = done;
+    document.getElementById('statDoneDetail').textContent = total > 0 ? `${Math.round(done/total*100)}% do total` : '— do total';
+    document.getElementById('statOverdue').textContent = overdue;
+    document.getElementById('statSoon').textContent = soon;
+
+    // Banner global
+    const banner = document.getElementById('alertBanner');
+    const bannerCount = document.getElementById('alertBannerCount');
+    const bannerText = document.getElementById('alertBannerText');
+    if (isCurrentMonth() && totalOverdue > 0) {
+      banner.classList.add('show');
+      bannerCount.textContent = `${totalOverdue} ${totalOverdue === 1 ? 'prazo vencido' : 'prazos vencidos'}`;
+      const items = [];
+      if (overdue > 0) items.push(`${overdue} ${overdue === 1 ? 'tarefa' : 'tarefas'}`);
+      if (tfjOverdue > 0) items.push(`${tfjOverdue} período${tfjOverdue > 1 ? 's' : ''} da TFJ`);
+      bannerText.textContent = `⚠ Atenção: ${items.join(' e ')} com prazo vencido sem registro de pagamento.`;
+    } else {
+      banner.classList.remove('show');
+    }
+  }
+
+  function renderCalendar() {
+    const grid = document.getElementById('calGrid');
+    const lastDay = getDaysInMonth(state.viewYear, state.viewMonth);
+    const firstDow = new Date(state.viewYear, state.viewMonth, 1).getDay(); // 0=dom
+    // Ajusta para semana iniciando na segunda
+    const offset = firstDow === 0 ? 6 : firstDow - 1;
+
+    // Monta mapa dia → tarefas
+    const dayMap = {}; // dia → [{title, color, taskId, isDone}]
+    state.tasks.forEach(task => {
+      const w = getTaskWindow(task);
+      const isDone = !!state.checks[checkKey(task.id)];
+      const bloco = getBlocoForTask(task.id);
+      const cor = bloco ? bloco.cor : CATEGORY_COLORS[task.category];
+      // Para tarefas com janela (ex: pluxee dias 25-29), marca todos os dias da janela
+      for (let d = w.start; d <= w.end; d++) {
+        if (!dayMap[d]) dayMap[d] = [];
+        dayMap[d].push({ title: task.title, color: cor, taskId: task.id, isDone, isEnd: d === w.end, isRange: w.start !== w.end });
+      }
+    });
+
+    // TFJ — marca o dia de vencimento de cada período
+    const TFJ_COLORS = ['#c0392b','#c0392b','#c0392b','#c0392b'];
+    TFJ_PERIODS.forEach((p, i) => {
+      const w2 = (() => {
+        if (p.vencNextMonth) return null; // P4 vence no mês seguinte, não aparece no calendário atual
+        return p.vencDia;
+      })();
+      if (!w2) return;
+      const isDone = !!state.checks[tfjCheckKey(p.id)];
+      if (!dayMap[w2]) dayMap[w2] = [];
+      dayMap[w2].push({ title: `TFJ ${p.label}`, color: TFJ_COLORS[i], taskId: null, tfjId: p.id, isDone, isTfj: true });
+    });
+    // P4 da TFJ do mês anterior vence dia 7 do mês atual
+    const p4PrevKey = `tfj_${monthKey(state.viewYear, state.viewMonth - 1 < 0 ? state.viewYear - 1 : state.viewYear)}_${state.viewMonth - 1 < 0 ? 11 : state.viewMonth - 1 < 10 ? '0' + (state.viewMonth) : state.viewMonth}_p4`;
+    // Simplificado: sempre mostra TFJ P4 do mês anterior no dia 7
+    const p4PrevDone = false; // simplificado
+    if (!dayMap[7]) dayMap[7] = [];
+    // Verifica se já existe entry do P4 anterior
+    const prevYear = state.viewMonth === 0 ? state.viewYear - 1 : state.viewYear;
+    const prevMonth = state.viewMonth === 0 ? 11 : state.viewMonth - 1;
+    const p4DoneKey = `tfj_${monthKey(prevYear, prevMonth)}_p4`;
+    const p4Done = !!state.checks[p4DoneKey];
+    dayMap[7] = (dayMap[7] || []).filter(x => !(x.isTfj && x.title && x.title.includes('P4 anterior')));
+    dayMap[7].push({ title: `TFJ P4 (${MONTHS_PT[prevMonth].slice(0,3)})`, color: '#922b21', taskId: null, tfjId: 'p4_prev', isDone: p4Done, isTfj: true, isPrevP4: true });
+
+    const DIAS_SEMANA = ['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'];
+    let html = DIAS_SEMANA.map((d, i) =>
+      `<div class="cal-dow ${i >= 5 ? 'weekend' : ''}">${d}</div>`
+    ).join('');
+
+    // Células vazias do início
+    for (let i = 0; i < offset; i++) {
+      html += `<div class="cal-day empty"></div>`;
+    }
+
+    for (let d = 1; d <= lastDay; d++) {
+      const date = new Date(state.viewYear, state.viewMonth, d);
+      const dow = date.getDay();
+      const isWeekend = dow === 0 || dow === 6;
+      const isFeriado = isFeriadoNacional(date);
+      const isToday = isCurrentMonth() && d === getTodayDay();
+
+      let classes = 'cal-day';
+      if (isToday) classes += ' today';
+      else if (isFeriado) classes += ' feriado';
+      else if (isWeekend) classes += ' weekend-day';
+
+      const entries = dayMap[d] || [];
+      const maxShow = 3;
+      const shown = entries.slice(0, maxShow);
+      const extra = entries.length - maxShow;
+
+      const chipsHtml = shown.map(e => {
+        const label = e.title.length > 16 ? e.title.slice(0, 15) + '…' : e.title;
+        const doneClass = e.isDone ? ' done-chip' : '';
+        const tfjClass = e.isTfj ? ' tfj-chip' : '';
+        const onclick = e.taskId
+          ? `onclick="toggleCheck('${e.taskId}')"`
+          : e.isTfj && !e.isPrevP4
+            ? `onclick="toggleTfjPeriod('${e.tfjId}')"`
+            : '';
+        return `<div class="cal-chip${doneClass}${tfjClass}" style="background:${e.color}" ${onclick} title="${escapeHtml(e.title)}">${escapeHtml(label)}</div>`;
+      }).join('');
+
+      const feriadoTag = isFeriado ? `<div class="cal-feriado-tag">feriado</div>` : '';
+      const moreTag = extra > 0 ? `<div class="cal-more">+${extra} mais</div>` : '';
+
+      html += `
+        <div class="${classes}">
+          <div class="cal-day-num">${d}</div>
+          <div class="cal-chips">${chipsHtml}${moreTag}</div>
+          ${feriadoTag}
+        </div>`;
+    }
+
+    grid.innerHTML = html;
+  }
+
+  function filteredTasks() {
+    let list = [...state.tasks];
+    if (state.activeFilter !== 'all') {
+      list = list.filter(t => t.category === state.activeFilter);
+    }
+    // Ordenar por dia da janela
+    list.sort((a, b) => {
+      const wa = getTaskWindow(a);
+      const wb = getTaskWindow(b);
+      return wa.start - wb.start;
+    });
+    return list;
+  }
+
+  // Agrupa tarefas por "bloco mensal" para exibição
+  const BLOCOS = [
+    {
+      id: 'inicio',
+      label: 'Bloco início do mês',
+      desc: 'até dia 05',
+      cor: '#264653',
+      taskIds: ['t_recompe', 't_doi', 't_prefeituras', 't_fic_srei', 't_fic_onrtpdj', 't_dap']
+    },
+    {
+      id: 'meio',
+      label: 'Bloco meio do mês',
+      desc: 'dia 20 (ou último dia útil anterior)',
+      cor: '#2d6a4f',
+      taskIds: ['t_inss', 't_irpf_func', 't_fgts']
+    },
+    {
+      id: 'fim',
+      label: 'Bloco fim do mês',
+      desc: 'dias 25–último',
+      cor: '#5a4e7c',
+      taskIds: ['t_pluxee', 't_unimed', 't_carneleao']
+    }
+  ];
+
+  function getBlocoForTask(taskId) {
+    return BLOCOS.find(b => b.taskIds.includes(taskId)) || null;
+  }
+
+  function renderTasks() {
+    const container = document.getElementById('taskList');
+    const list = filteredTasks();
+
+    if (list.length === 0) {
+      container.innerHTML = '<div class="empty-state">Nenhuma tarefa nesta categoria. Clique em <strong>＋ Nova tarefa</strong> para começar.</div>';
+      return;
+    }
+
+    container.innerHTML = list.map(task => {
+      const w = getTaskWindow(task);
+      const status = getTaskStatus(task);
+      const isDone = status === 'done';
+      const checkId = checkKey(task.id);
+      const noteVal = state.notes[checkId] || '';
+
+      let statusClass = '';
+      if (isDone) statusClass = 'done';
+      else if (status === 'overdue') statusClass = 'urgent';
+      else if (status === 'urgent') statusClass = 'urgent';
+      else if (status === 'soon') statusClass = 'due-soon';
+
+      const refLabel = {anterior: 'mês anterior', atual: 'mês atual', proximo: 'mês seguinte'}[task.refMonth] || '';
+
+      const windowLabel = w.lastDay
+        ? `último dia do mês (dia ${w.start})`
+        : w.anticipated
+          ? `dia ${w.start} <span style="font-size:10px;color:var(--accent-deep);font-family:var(--font-mono);">(antecipado do dia ${w.nominalDay})</span>`
+          : w.fixed
+            ? `dia ${w.start}`
+            : (w.start === w.end ? `dia ${w.start}` : `dia ${w.start}–${w.end}`);
+
+      const bloco = getBlocoForTask(task.id);
+      const blocoTag = bloco
+        ? `<span class="category-tag" style="background:${bloco.cor}22;color:${bloco.cor};border:1px solid ${bloco.cor}44;">⬡ ${bloco.label}</span>`
+        : '';
+
+      let alertText = '';
+      if (status === 'overdue') alertText = `
+        <span style="
+          display:inline-flex;align-items:center;gap:5px;
+          background:var(--red-deep);color:white;
+          font-size:10px;font-weight:700;letter-spacing:0.1em;
+          padding:3px 9px;border-radius:3px;text-transform:uppercase;
+          font-family:var(--font-mono);
+        ">⚠ ATRASADA</span>`;
+      else if (status === 'urgent') alertText = `
+        <span style="
+          display:inline-flex;align-items:center;gap:5px;
+          background:var(--accent);color:white;
+          font-size:10px;font-weight:700;letter-spacing:0.1em;
+          padding:3px 9px;border-radius:3px;text-transform:uppercase;
+          font-family:var(--font-mono);
+        ">● EM JANELA</span>`;
+      else if (status === 'soon') alertText = `
+        <span style="
+          display:inline-flex;align-items:center;gap:5px;
+          background:var(--blue-soft);color:var(--blue);
+          font-size:10px;font-weight:700;letter-spacing:0.1em;
+          padding:3px 9px;border-radius:3px;text-transform:uppercase;
+          font-family:var(--font-mono);
+        ">◷ EM BREVE</span>`;
+
+      return `
+        <div class="task ${statusClass}" data-id="${task.id}">
+          <button class="task-checkbox" onclick="toggleCheck('${task.id}')"></button>
+          <div class="task-content">
+            <div class="task-meta-top">
+              <span class="category-tag ${task.category}">${CATEGORY_LABELS[task.category]}</span>
+              ${blocoTag}
+              ${alertText}
+            </div>
+            <div class="task-title">${escapeHtml(task.title)}</div>
+            ${task.desc ? `<div class="task-desc">${escapeHtml(task.desc)}</div>` : ''}
+          </div>
+          <div class="task-window">
+            <strong>${windowLabel}</strong>
+            ${refLabel ? `ref: ${refLabel}` : ''}
+            ${task.system ? `<br/>${escapeHtml(task.system)}` : ''}
+          </div>
+          <div class="task-actions">
+            <button class="icon-btn" onclick="toggleExpand('${task.id}')" title="Expandir">⌄</button>
+            <button class="icon-btn" onclick="editTask('${task.id}')" title="Editar">✎</button>
+            <button class="icon-btn delete" onclick="deleteTask('${task.id}')" title="Excluir">×</button>
+          </div>
+          <div class="task-detail-area">
+            <div class="detail-row">
+              <span class="detail-label">Janela</span>
+              <span class="detail-value">${
+                w.lastDay
+                  ? `Último dia do mês (dia ${w.start}) — mês subsequente ao de apuração`
+                  : w.anticipated
+                    ? `Dia ${w.start} — antecipado do dia ${w.nominalDay} (fds ou feriado). Regra: último dia útil anterior.`
+                    : w.fixed
+                      ? `Dia fixo ${w.start} do mês`
+                      : `${task.startBefore} a ${task.endBefore} dias antes do fim do mês (dia ${w.start} a ${w.end})`
+              }</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Sistema</span>
+              <span class="detail-value">${task.system ? escapeHtml(task.system) : '—'}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Mês ref.</span>
+              <span class="detail-value">${refLabel || 'não especificado'}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Anotações ${MONTHS_PT[state.viewMonth]}/${state.viewYear}</span>
+              <textarea class="notes-textarea"
+                placeholder="Valores executados, número de protocolo, observações deste mês..."
+                onchange="saveNote('${task.id}', this.value)">${escapeHtml(noteVal)}</textarea>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>"']/g, m => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[m]));
+  }
+
+  function renderAll() {
+    renderHeader();
+    renderDashboard();
+    renderTfj();
+    renderCalendar();
+    renderTasks();
+  }
+
+  // ================================
+  // AÇÕES
+  // ================================
+  function toggleCheck(taskId) {
+    const k = checkKey(taskId);
+    if (state.checks[k]) delete state.checks[k];
+    else state.checks[k] = true;
+    saveState();
+    renderAll();
+  }
+
+  function toggleExpand(taskId) {
+    const el = document.querySelector(`.task[data-id="${taskId}"]`);
+    if (el) el.classList.toggle('expanded');
+  }
+
+  function saveNote(taskId, value) {
+    const k = checkKey(taskId);
+    if (value && value.trim()) state.notes[k] = value;
+    else delete state.notes[k];
+    saveState();
+  }
+
+  function deleteTask(taskId) {
+    const t = state.tasks.find(x => x.id === taskId);
+    if (!t) return;
+    if (!confirm(`Excluir a tarefa "${t.title}"?\n\nIsso removerá ela de todos os meses. As marcações ficam preservadas no histórico.`)) return;
+    state.tasks = state.tasks.filter(x => x.id !== taskId);
+    saveState();
+    renderAll();
+  }
+
+  function changeMonth(delta) {
+    state.viewMonth += delta;
+    if (state.viewMonth < 0) { state.viewMonth = 11; state.viewYear--; }
+    if (state.viewMonth > 11) { state.viewMonth = 0; state.viewYear++; }
+    renderAll();
+  }
+
+  function goToToday() {
+    state.viewYear = today.getFullYear();
+    state.viewMonth = today.getMonth();
+    renderAll();
+  }
+
+  function resetMonthChecks() {
+    if (!confirm(`Resetar todas as marcações de ${MONTHS_PT[state.viewMonth]}/${state.viewYear}?\n\nInclui tarefas e todos os 4 períodos da TFJ.`)) return;
+    const prefix = monthKey(state.viewYear, state.viewMonth) + '_';
+    const tfjPrefix = `tfj_${monthKey(state.viewYear, state.viewMonth)}_`;
+    Object.keys(state.checks).forEach(k => {
+      if (k.startsWith(prefix) || k.startsWith(tfjPrefix)) delete state.checks[k];
+    });
+    Object.keys(state.notes).forEach(k => {
+      if (k.startsWith(tfjPrefix)) delete state.notes[k];
+    });
+    saveState();
+    renderAll();
+  }
+
+  // ================================
+  // FILTROS
+  // ================================
+  document.querySelectorAll('.filter-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      state.activeFilter = chip.dataset.filter;
+      renderAll();
+    });
+  });
+
+  // ================================
+  // MODAL
+  // ================================
+  function openModal(taskId) {
+    document.getElementById('modal').classList.add('open');
+    if (taskId) {
+      const t = state.tasks.find(x => x.id === taskId);
+      if (!t) return;
+      document.getElementById('modalTitle').textContent = 'Editar tarefa';
+      document.getElementById('taskId').value = t.id;
+      document.getElementById('taskInputTitle').value = t.title;
+      document.getElementById('taskInputDesc').value = t.desc || '';
+      document.getElementById('taskInputCategory').value = t.category;
+      document.getElementById('taskInputRefMonth').value = t.refMonth || 'atual';
+      document.getElementById('taskInputStart').value = t.startBefore || '';
+      document.getElementById('taskInputEnd').value = t.endBefore || '';
+      document.getElementById('taskInputFixedDay').value = t.fixedDay || '';
+      document.getElementById('taskInputSystem').value = t.system || '';
+    } else {
+      document.getElementById('modalTitle').textContent = 'Nova tarefa';
+      document.getElementById('taskId').value = '';
+      document.getElementById('taskInputTitle').value = '';
+      document.getElementById('taskInputDesc').value = '';
+      document.getElementById('taskInputCategory').value = 'rh';
+      document.getElementById('taskInputRefMonth').value = 'atual';
+      document.getElementById('taskInputStart').value = '';
+      document.getElementById('taskInputEnd').value = '';
+      document.getElementById('taskInputFixedDay').value = '';
+      document.getElementById('taskInputSystem').value = '';
+    }
+    setTimeout(() => document.getElementById('taskInputTitle').focus(), 50);
+  }
+
+  function closeModal() {
+    document.getElementById('modal').classList.remove('open');
+  }
+
+  function editTask(taskId) {
+    openModal(taskId);
+  }
+
+  function saveTask() {
+    const title = document.getElementById('taskInputTitle').value.trim();
+    if (!title) {
+      alert('Informe um título.');
+      return;
+    }
+    const id = document.getElementById('taskId').value || ('t_' + Date.now());
+    const fixedDay = parseInt(document.getElementById('taskInputFixedDay').value) || null;
+    const startBefore = parseInt(document.getElementById('taskInputStart').value) || 0;
+    const endBefore = parseInt(document.getElementById('taskInputEnd').value) || 0;
+
+    const taskData = {
+      id,
+      title,
+      desc: document.getElementById('taskInputDesc').value.trim(),
+      category: document.getElementById('taskInputCategory').value,
+      refMonth: document.getElementById('taskInputRefMonth').value,
+      startBefore: fixedDay ? null : Math.max(startBefore, endBefore),
+      endBefore: fixedDay ? null : Math.min(startBefore, endBefore),
+      fixedDay,
+      system: document.getElementById('taskInputSystem').value.trim(),
+      createdAt: new Date().toISOString()
+    };
+
+    const existing = state.tasks.findIndex(t => t.id === id);
+    if (existing >= 0) state.tasks[existing] = {...state.tasks[existing], ...taskData};
+    else state.tasks.push(taskData);
+
+    saveState();
+    closeModal();
+    renderAll();
+  }
+
+  // Fechar modal ao clicar fora
+  document.getElementById('modal').addEventListener('click', e => {
+    if (e.target.id === 'modal') closeModal();
+  });
+
+  // ================================
+  // EXPORT/IMPORT
+  // ================================
+  function exportData() {
+    const blob = new Blob([JSON.stringify({
+      tasks: state.tasks,
+      checks: state.checks,
+      notes: state.notes,
+      exportedAt: new Date().toISOString()
+    }, null, 2)], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `tarefas_cartorio_${monthKey(state.viewYear, state.viewMonth)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function importData() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'application/json';
+    input.onchange = e => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = ev => {
+        try {
+          const data = JSON.parse(ev.target.result);
+          if (!confirm('Substituir todas as tarefas e marcações atuais pelo conteúdo do arquivo?')) return;
+          state.tasks = data.tasks || [];
+          state.checks = data.checks || {};
+          state.notes = data.notes || {};
+          saveState();
+          renderAll();
+          alert('Importação concluída.');
+        } catch(err) {
+          alert('Arquivo inválido: ' + err.message);
+        }
+      };
+      reader.readAsText(file);
+    };
+    input.click();
+  }
+
+  // ================================
+  // TFJ — LÓGICA DE PERÍODOS
+  // ================================
+  // Períodos de competência (fixos, dentro do mês visualizado):
+  // P1: dias 01–07 → vencimento dia 14 do mesmo mês
+  // P2: dias 08–14 → vencimento dia 21 do mesmo mês
+  // P3: dias 15–21 → vencimento dia 28 do mesmo mês
+  // P4: dias 22–fim → vencimento dia 07 do MÊS SEGUINTE
+
+  const TFJ_PERIODS = [
+    { id: 'p1', label: '1º Período', competencia: 'dias 01–07', vencDia: 14, vencNextMonth: false },
+    { id: 'p2', label: '2º Período', competencia: 'dias 08–14', vencDia: 21, vencNextMonth: false },
+    { id: 'p3', label: '3º Período', competencia: 'dias 15–21', vencDia: 28, vencNextMonth: false },
+    { id: 'p4', label: '4º Período', competencia: 'dia 22–fim', vencDia: 7,  vencNextMonth: true  },
+  ];
+
+  function tfjCheckKey(periodId) {
+    return `tfj_${monthKey(state.viewYear, state.viewMonth)}_${periodId}`;
+  }
+
+  function getTfjPeriodStatus(period) {
+    const isDone = state.checks[tfjCheckKey(period.id)];
+    if (isDone) return 'done';
+
+    if (!isCurrentMonth()) return 'normal';
+
+    const td = getTodayDay();
+    const lastDay = getDaysInMonth(state.viewYear, state.viewMonth);
+
+    // Calcula vencimento absoluto
+    let vencDate;
+    if (period.vencNextMonth) {
+      // dia 7 do mês seguinte
+      vencDate = new Date(state.viewYear, state.viewMonth + 1, period.vencDia);
+    } else {
+      vencDate = new Date(state.viewYear, state.viewMonth, period.vencDia);
+    }
+
+    const todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+    // Qual período está ativo hoje
+    let compStart, compEnd;
+    if (period.id === 'p1') { compStart = 1;  compEnd = 7; }
+    if (period.id === 'p2') { compStart = 8;  compEnd = 14; }
+    if (period.id === 'p3') { compStart = 15; compEnd = 21; }
+    if (period.id === 'p4') { compStart = 22; compEnd = lastDay; }
+
+    const inCompetencia = td >= compStart && td <= compEnd;
+    const passedVenc = todayDate > vencDate;
+    const nearVenc = !passedVenc && (vencDate - todayDate) / 86400000 <= 3;
+
+    if (passedVenc) return 'overdue';
+    if (inCompetencia || nearVenc) return 'active';
+    return 'normal';
+  }
+
+  function toggleTfjPeriod(periodId) {
+    const k = tfjCheckKey(periodId);
+    if (state.checks[k]) delete state.checks[k];
+    else state.checks[k] = true;
+    saveState();
+    renderTfj();
+    renderDashboard(); // atualiza contadores gerais
+  }
+
+  function saveTfjNote(periodId, value) {
+    const k = tfjCheckKey(periodId) + '_note';
+    if (value && value.trim()) state.notes[k] = value;
+    else delete state.notes[k];
+    saveState();
+  }
+
+  function renderTfj() {
+    const container = document.getElementById('tfjPeriods');
+    const alertEl = document.getElementById('tfjAlert');
+    const lastDay = getDaysInMonth(state.viewYear, state.viewMonth);
+    const nextMonthName = MONTHS_PT[(state.viewMonth + 1) % 12];
+
+    let doneCnt = 0;
+    let alertMsg = '';
+    let alertClass = '';
+
+    const html = TFJ_PERIODS.map(p => {
+      const status = getTfjPeriodStatus(p);
+      const isDone = status === 'done';
+      if (isDone) doneCnt++;
+
+      const noteKey = tfjCheckKey(p.id) + '_note';
+      const noteVal = state.notes[noteKey] || '';
+
+      // Label do vencimento
+      const vencLabel = p.vencNextMonth
+        ? `até dia 07 de ${nextMonthName}`
+        : `até dia ${p.vencDia} de ${MONTHS_PT[state.viewMonth]}`;
+
+      // Competência com dia final real
+      const compLabel = p.id === 'p4'
+        ? `dias 22–${lastDay} de ${MONTHS_PT[state.viewMonth]}`
+        : `${p.competencia} de ${MONTHS_PT[state.viewMonth]}`;
+
+      let periodClass = '';
+      if (isDone) periodClass = 'done-period';
+      else if (status === 'overdue') { periodClass = 'overdue-period'; alertClass = 'danger'; alertMsg = `⚠ Atenção: há período(s) da TFJ com vencimento ultrapassado sem pagamento registrado.`; }
+      else if (status === 'active') { periodClass = 'active-period'; if (!alertClass) { alertClass = 'warn'; alertMsg = `● Período em andamento — verifique o vencimento da TFJ.`; } }
+
+      return `
+        <div class="tfj-period ${periodClass}" id="tfj_${p.id}">
+          <div class="period-num">
+            <span>${p.label}</span>
+            <span class="period-status-dot"></span>
+          </div>
+          <div class="period-competencia">${compLabel}</div>
+          <div class="period-vencimento">Vencimento: <strong>${vencLabel}</strong></div>
+          <button class="period-check-btn" onclick="toggleTfjPeriod('${p.id}')">
+            ${isDone ? '✓ Pago' : 'Marcar como pago'}
+          </button>
+          <div class="tfj-note-area">
+            <input type="text"
+              placeholder="Guia / valor / observação..."
+              value="${escapeHtml(noteVal)}"
+              onchange="saveTfjNote('${p.id}', this.value)"
+            />
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    container.innerHTML = html;
+
+    // Progress
+    document.getElementById('tfjProgressLabel').textContent = `${doneCnt}/4 pagos`;
+    document.getElementById('tfjProgressFill').style.width = `${doneCnt * 25}%`;
+
+    // Alerta dinâmico
+    if (isCurrentMonth() && doneCnt === 4) {
+      alertEl.className = 'tfj-alert ok show';
+      alertEl.textContent = '✓ Todos os 4 períodos da TFJ foram pagos neste mês.';
+    } else if (alertMsg) {
+      alertEl.className = `tfj-alert ${alertClass} show`;
+      alertEl.textContent = alertMsg;
+    } else {
+      alertEl.className = 'tfj-alert';
+      alertEl.textContent = '';
+    }
+  }
+
+  // ================================
+  // PWA — MANIFEST + SERVICE WORKER
+  // ================================
+
+  // Ícone SVG do app (balança + cartório)
+  const SVG_ICON = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+    <rect width="512" height="512" rx="80" fill="#1a1612"/>
+    <rect x="60" y="60" width="392" height="392" rx="48" fill="#1a1612"/>
+    <!-- Coluna central -->
+    <rect x="248" y="120" width="16" height="272" rx="4" fill="#b8860b"/>
+    <!-- Base -->
+    <rect x="140" y="368" width="232" height="20" rx="6" fill="#b8860b"/>
+    <!-- Braço horizontal -->
+    <rect x="140" y="148" width="232" height="14" rx="4" fill="#faf6ef"/>
+    <!-- Prato esquerdo -->
+    <ellipse cx="176" cy="230" rx="48" ry="14" fill="none" stroke="#faf6ef" stroke-width="10"/>
+    <line x1="176" y1="162" x2="176" y2="230" stroke="#faf6ef" stroke-width="6"/>
+    <!-- Prato direito -->
+    <ellipse cx="336" cy="250" rx="48" ry="14" fill="none" stroke="#faf6ef" stroke-width="10"/>
+    <line x1="336" y1="162" x2="336" y2="250" stroke="#faf6ef" stroke-width="6"/>
+    <!-- Letras SRS -->
+    <text x="256" y="340" text-anchor="middle" font-family="Georgia,serif" font-size="48" font-weight="700" fill="#b8860b">SRS</text>
+  </svg>`;
+
+  const ICON_BLOB = URL.createObjectURL(new Blob([SVG_ICON], {type:'image/svg+xml'}));
+  document.getElementById('favicon-icon').href = ICON_BLOB;
+
+  // Canvas para ícone PNG (apple-touch-icon precisa de PNG)
+  const canvas = document.createElement('canvas');
+  canvas.width = 192; canvas.height = 192;
+  const ctx = canvas.getContext('2d');
+  const img = new Image();
+  img.onload = () => {
+    ctx.drawImage(img, 0, 0, 192, 192);
+    const png = canvas.toDataURL('image/png');
+    document.getElementById('apple-icon').href = png;
+
+    // Manifest com ícone PNG embutido
+    const manifest = {
+      name: 'Cartório SRS — Roteiro Mensal',
+      short_name: 'Cartório SRS',
+      description: 'Roteiro de tarefas e obrigações mensais do Cartório de Santa Rita do Sapucaí',
+      start_url: './',
+      display: 'standalone',
+      background_color: '#f4efe6',
+      theme_color: '#1a1612',
+      orientation: 'portrait-primary',
+      lang: 'pt-BR',
+      icons: [
+        { src: png, sizes: '192x192', type: 'image/png', purpose: 'any maskable' },
+        { src: png, sizes: '512x512', type: 'image/png', purpose: 'any maskable' }
+      ]
+    };
+    const manifestBlob = URL.createObjectURL(new Blob([JSON.stringify(manifest)], {type:'application/json'}));
+    document.getElementById('pwa-manifest').href = manifestBlob;
+  };
+  img.src = ICON_BLOB;
+
+  // Service Worker inline para cache offline
+  const SW_CODE = `
+    const CACHE = 'cartorio-srs-v1';
+    self.addEventListener('install', e => {
+      self.skipWaiting();
+    });
+    self.addEventListener('activate', e => {
+      e.waitUntil(caches.keys().then(keys =>
+        Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
+      ));
+      self.clients.claim();
+    });
+    self.addEventListener('fetch', e => {
+      // Cache-first para fontes Google, network-first para o resto
+      if (e.request.url.includes('fonts.googleapis') || e.request.url.includes('fonts.gstatic')) {
+        e.respondWith(
+          caches.match(e.request).then(cached => cached || fetch(e.request).then(res => {
+            const clone = res.clone();
+            caches.open(CACHE).then(c => c.put(e.request, clone));
+            return res;
+          }))
+        );
+      }
+    });
+  `;
+
+  if ('serviceWorker' in navigator) {
+    const swBlob = URL.createObjectURL(new Blob([SW_CODE], {type:'application/javascript'}));
+    navigator.serviceWorker.register(swBlob).catch(() => {});
+  }
+
+  // Banner de instalação (evento beforeinstallprompt)
+  let deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    deferredPrompt = e;
+    document.getElementById('installBanner').classList.add('show');
+  });
+
+  document.getElementById('installBtn').addEventListener('click', async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    document.getElementById('installBanner').classList.remove('show');
+  });
+
+  window.addEventListener('appinstalled', () => {
+    document.getElementById('installBanner').classList.remove('show');
+    deferredPrompt = null;
+  });
+
+  // ================================
+  // NAVEGAÇÃO MOBILE (bottom nav)
+  // ================================
+  const SECTIONS = {
+    inicio: ['calSection', 'dashSection'],
+    tfj:    ['tfjSection'],
+    tarefas: ['filterSection', 'taskListSection']
+  };
+
+  let currentNav = 'all'; // desktop mostra tudo
+
+  function mobileNav(tab) {
+    document.querySelectorAll('.bottom-nav-item').forEach(b => b.classList.remove('active'));
+    document.getElementById('nav-' + tab)?.classList.add('active');
+
+    // No mobile, esconde/mostra seções conforme aba
+    const isMobile = window.innerWidth <= 768;
+    if (!isMobile) return;
+
+    const allSections = ['dashSection','calSection','tfjSection','filterSection','taskListSection'];
+    const show = SECTIONS[tab] || allSections;
+
+    allSections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = show.includes(id) ? '' : 'none';
+    });
+  }
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 768) {
+      ['dashSection','calSection','tfjSection','filterSection','taskListSection'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = '';
+      });
+    }
+  });
+
+  // ================================
+  // INIT
+  // ================================
+  loadState();
+  renderAll();
+</script>
+</body>
+</html>
