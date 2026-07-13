@@ -11,33 +11,29 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="Cartório SRS" />
 <meta name="mobile-web-app-capable" content="yes" />
-<meta name="theme-color" content="#1a1612" />
+<meta name="theme-color" content="#132B46" />
 <meta name="description" content="Roteiro mensal de tarefas e obrigações do Cartório de Registro de Imóveis de Santa Rita do Sapucaí" />
 
-<!-- Manifest inline via blob (PWA sem servidor) -->
-<link rel="manifest" id="pwa-manifest" />
-
-<!-- Ícone Apple Touch (SVG inline convertido) -->
-<link rel="apple-touch-icon" id="apple-icon" />
-
-<!-- Ícone favicon -->
-<link rel="icon" id="favicon-icon" type="image/svg+xml" />
+<!-- Manifest e ícones (arquivos reais — MIV v2.0) -->
+<link rel="manifest" href="manifest.json" />
+<link rel="apple-touch-icon" href="icons/icon-192.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    /* Paleta - tons graves de cartório, com acento âmbar */
-    --bg: #f4efe6;
-    --bg-paper: #faf6ef;
-    --ink: #1a1612;
-    --ink-soft: #4a3f33;
-    --ink-mute: #8a7d6c;
-    --line: #d9cfbe;
-    --line-soft: #ebe2d2;
-    --accent: #b8860b;
-    --accent-deep: #8b6508;
-    --accent-soft: #f0e0a8;
+    /* Paleta MIV v2.0 — azul institucional + dourados */
+    --bg: #f9f4ea;
+    --bg-paper: #fdfaf3;
+    --ink: #132b46;
+    --ink-soft: #3d4a5c;
+    --ink-mute: #6b7a8c;
+    --line: #d8d2c4;
+    --line-soft: #eae4d6;
+    --accent: #de974c;
+    --accent-deep: #b06f2e;
+    --accent-soft: #f8d683;
     --green: #2d6a4f;
     --green-soft: #d8e9dd;
     --red: #9b2226;
@@ -47,9 +43,9 @@
     --purple: #5a4e7c;
     --purple-soft: #e0dbe9;
 
-    /* Tipografia */
-    --font-display: 'Playfair Display', Georgia, serif;
-    --font-body: 'Outfit', -apple-system, sans-serif;
+    /* Tipografia MIV: Cinzel (títulos) + Montserrat (textos, substituta livre da Gotham) */
+    --font-display: 'Cinzel', Georgia, serif;
+    --font-body: 'Montserrat', -apple-system, sans-serif;
     --font-mono: 'DM Mono', monospace;
 
     /* Vermelho mais saturado para atrasos */
@@ -78,15 +74,47 @@
     margin: 0 auto;
   }
 
-  /* === HEADER === */
+  /* === HEADER — faixa azul institucional (MIV: aplicação preferencial) === */
   header {
-    border-bottom: 2px solid var(--ink);
-    padding-bottom: 24px;
+    background: var(--ink);
+    border-bottom: 3px solid var(--accent);
+    border-radius: 14px;
+    padding: 24px 28px;
     margin-bottom: 32px;
     display: grid;
     grid-template-columns: 1fr auto;
     gap: 24px;
     align-items: end;
+  }
+
+  .header-brand {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .header-logo {
+    width: 54px;
+    height: 54px;
+    flex-shrink: 0;
+  }
+
+  header .header-eyebrow { color: var(--accent-soft); }
+  header h1 { color: #ffffff; }
+  header h1 em { color: var(--accent-soft); }
+  header .header-subtitle { color: #b8c4d4; }
+  header .month-display { color: #ffffff; }
+  header .month-display .year { color: var(--accent-soft); }
+  header #todayLabel { color: #8fa0b5; }
+  header .month-btn {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.25);
+    color: #e8edf3;
+  }
+  header .month-btn:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--ink);
   }
 
   .header-title {
@@ -107,14 +135,14 @@
   h1 {
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: clamp(28px, 4vw, 44px);
-    letter-spacing: -0.02em;
-    line-height: 1.05;
+    font-size: clamp(20px, 3vw, 32px); /* Cinzel é caixa-alta: corpo menor */
+    letter-spacing: 0.01em;
+    line-height: 1.15;
     color: var(--ink);
   }
 
   h1 em {
-    font-style: italic;
+    font-style: normal; /* Cinzel não possui itálico */
     color: var(--accent-deep);
   }
 
@@ -1199,6 +1227,9 @@
   }
 
   @media (max-width: 480px) {
+    .header-eyebrow { font-size: 9px; letter-spacing: 0.12em; }
+    .header-logo { width: 42px; height: 42px; }
+
     .cal-grid { gap: 2px; }
     .cal-day { min-height: 48px; }
     .cal-dow { font-size: 9px; padding-bottom: 4px; }
@@ -1242,8 +1273,13 @@
 
   <header>
     <div class="header-title">
-      <span class="header-eyebrow">Cartório de Registro de Imóveis · Santa Rita do Sapucaí · CNS 05.933-7</span>
-      <h1>Roteiro <em>mensal</em> de tarefas</h1>
+      <div class="header-brand">
+        <img src="icons/logo-branca.png" alt="Cartório SRS" class="header-logo" />
+        <div>
+          <span class="header-eyebrow">Registro de Imóveis, Títulos e Documentos e Pessoas Jurídicas · Santa Rita do Sapucaí · CNS 05.933-7</span>
+          <h1>Roteiro <em>mensal</em> de tarefas</h1>
+        </div>
+      </div>
       <p class="header-subtitle">Rotinas administrativas, contábeis, de RH e obrigações legais do Oficial. Construído iterativamente conforme a execução real de cada mês.</p>
     </div>
     <div class="header-meta">
@@ -1671,13 +1707,60 @@
   }
 
   // Feriados nacionais fixos (dia/mês) — antecipam vencimento do dia 20
+  // ================================
+  // MOTOR DE FERIADOS (M1 — Sprint 1)
+  // ================================
+
+  // Nacionais de data fixa (inclui 20/11 — Lei nº 14.759/2023)
   const FERIADOS_FIXOS = [
-    [1,1],[21,4],[1,5],[7,9],[12,10],[2,11],[15,11],[25,12]
+    [1,1],[21,4],[1,5],[7,9],[12,10],[2,11],[15,11],[20,11],[25,12]
   ];
+
+  // Municipais de Santa Rita do Sapucaí/MG (informados pelo Oficial em 13/07/2026)
+  // 22/05 Santa Rita de Cássia (padroeira) · 24/05 aniversário da cidade
+  // (20/11 Consciência Negra já consta nos nacionais fixos)
+  const FERIADOS_MUNICIPAIS = [
+    [22,5],[24,5]
+  ];
+
+  // Páscoa — algoritmo de Meeus/Jones/Butcher (calendário gregoriano)
+  const _easterCache = {};
+  function easterDate(year) {
+    if (_easterCache[year]) return _easterCache[year];
+    const a = year % 19,
+          b = Math.floor(year / 100), c = year % 100,
+          d = Math.floor(b / 4), e = b % 4,
+          f = Math.floor((b + 8) / 25), g = Math.floor((b - f + 1) / 3),
+          h = (19 * a + b - d - g + 15) % 30,
+          i = Math.floor(c / 4), k = c % 4,
+          l = (32 + 2 * e + 2 * i - h - k) % 7,
+          m = Math.floor((a + 11 * h + 22 * l) / 451),
+          month = Math.floor((h + l - 7 * m + 114) / 31),
+          day = ((h + l - 7 * m + 114) % 31) + 1;
+    _easterCache[year] = new Date(year, month - 1, day);
+    return _easterCache[year];
+  }
+
+  // Móveis sem expediente bancário (calendário FEBRABAN):
+  // segunda e terça de Carnaval, Sexta-feira Santa e Corpus Christi
+  const _moveisCache = {};
+  function feriadosMoveis(year) {
+    if (_moveisCache[year]) return _moveisCache[year];
+    const pascoa = easterDate(year);
+    const off = (days) => {
+      const d = new Date(pascoa);
+      d.setDate(d.getDate() + days);
+      return [d.getDate(), d.getMonth() + 1];
+    };
+    _moveisCache[year] = [off(-48), off(-47), off(-2), off(60)];
+    return _moveisCache[year];
+  }
 
   function isFeriadoNacional(date) {
     const d = date.getDate(), m = date.getMonth() + 1;
-    return FERIADOS_FIXOS.some(([fd, fm]) => fd === d && fm === m);
+    if (FERIADOS_FIXOS.some(([fd, fm]) => fd === d && fm === m)) return true;
+    if (FERIADOS_MUNICIPAIS.some(([fd, fm]) => fd === d && fm === m)) return true;
+    return feriadosMoveis(date.getFullYear()).some(([fd, fm]) => fd === d && fm === m);
   }
 
   // Dado um dia do mês, retrocede até o último dia útil (não fds, não feriado)
@@ -2411,93 +2494,39 @@
   }
 
   // ================================
-  // PWA — MANIFEST + SERVICE WORKER
+  // PWA — SERVICE WORKER (M4 — Sprint 1)
+  // Manifest e ícones agora são arquivos reais (manifest.json, icons/)
   // ================================
 
-  // Ícone SVG do app (balança + cartório)
-  const SVG_ICON = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-    <rect width="512" height="512" rx="80" fill="#1a1612"/>
-    <rect x="60" y="60" width="392" height="392" rx="48" fill="#1a1612"/>
-    <!-- Coluna central -->
-    <rect x="248" y="120" width="16" height="272" rx="4" fill="#b8860b"/>
-    <!-- Base -->
-    <rect x="140" y="368" width="232" height="20" rx="6" fill="#b8860b"/>
-    <!-- Braço horizontal -->
-    <rect x="140" y="148" width="232" height="14" rx="4" fill="#faf6ef"/>
-    <!-- Prato esquerdo -->
-    <ellipse cx="176" cy="230" rx="48" ry="14" fill="none" stroke="#faf6ef" stroke-width="10"/>
-    <line x1="176" y1="162" x2="176" y2="230" stroke="#faf6ef" stroke-width="6"/>
-    <!-- Prato direito -->
-    <ellipse cx="336" cy="250" rx="48" ry="14" fill="none" stroke="#faf6ef" stroke-width="10"/>
-    <line x1="336" y1="162" x2="336" y2="250" stroke="#faf6ef" stroke-width="6"/>
-    <!-- Letras SRS -->
-    <text x="256" y="340" text-anchor="middle" font-family="Georgia,serif" font-size="48" font-weight="700" fill="#b8860b">SRS</text>
-  </svg>`;
-
-  const ICON_BLOB = URL.createObjectURL(new Blob([SVG_ICON], {type:'image/svg+xml'}));
-  document.getElementById('favicon-icon').href = ICON_BLOB;
-
-  // Canvas para ícone PNG (apple-touch-icon precisa de PNG)
-  const canvas = document.createElement('canvas');
-  canvas.width = 192; canvas.height = 192;
-  const ctx = canvas.getContext('2d');
-  const img = new Image();
-  img.onload = () => {
-    ctx.drawImage(img, 0, 0, 192, 192);
-    const png = canvas.toDataURL('image/png');
-    document.getElementById('apple-icon').href = png;
-
-    // Manifest com ícone PNG embutido
-    const manifest = {
-      name: 'Cartório SRS — Roteiro Mensal',
-      short_name: 'Cartório SRS',
-      description: 'Roteiro de tarefas e obrigações mensais do Cartório de Santa Rita do Sapucaí',
-      start_url: './',
-      display: 'standalone',
-      background_color: '#f4efe6',
-      theme_color: '#1a1612',
-      orientation: 'portrait-primary',
-      lang: 'pt-BR',
-      icons: [
-        { src: png, sizes: '192x192', type: 'image/png', purpose: 'any maskable' },
-        { src: png, sizes: '512x512', type: 'image/png', purpose: 'any maskable' }
-      ]
-    };
-    const manifestBlob = URL.createObjectURL(new Blob([JSON.stringify(manifest)], {type:'application/json'}));
-    document.getElementById('pwa-manifest').href = manifestBlob;
-  };
-  img.src = ICON_BLOB;
-
-  // Service Worker inline para cache offline
-  const SW_CODE = `
-    const CACHE = 'cartorio-srs-v1';
-    self.addEventListener('install', e => {
-      self.skipWaiting();
-    });
-    self.addEventListener('activate', e => {
-      e.waitUntil(caches.keys().then(keys =>
-        Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
-      ));
-      self.clients.claim();
-    });
-    self.addEventListener('fetch', e => {
-      // Cache-first para fontes Google, network-first para o resto
-      if (e.request.url.includes('fonts.googleapis') || e.request.url.includes('fonts.gstatic')) {
-        e.respondWith(
-          caches.match(e.request).then(cached => cached || fetch(e.request).then(res => {
-            const clone = res.clone();
-            caches.open(CACHE).then(c => c.put(e.request, clone));
-            return res;
-          }))
-        );
-      }
-    });
-  `;
-
   if ('serviceWorker' in navigator) {
-    const swBlob = URL.createObjectURL(new Blob([SW_CODE], {type:'application/javascript'}));
-    navigator.serviceWorker.register(swBlob).catch(() => {});
+    navigator.serviceWorker.register('sw.js').then(reg => {
+      // Detecta nova versão publicada e avisa o Oficial
+      reg.addEventListener('updatefound', () => {
+        const nw = reg.installing;
+        if (!nw) return;
+        nw.addEventListener('statechange', () => {
+          if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+            showUpdateToast();
+          }
+        });
+      });
+    }).catch(() => {});
   }
+
+  function showUpdateToast() {
+    if (document.getElementById('updateToast')) return;
+    const toast = document.createElement('div');
+    toast.id = 'updateToast';
+    toast.style.cssText = 'position:fixed;bottom:calc(76px + var(--safe-bottom));left:50%;transform:translateX(-50%);' +
+      'background:#132b46;color:#fff;padding:12px 18px;border-radius:12px;border:1px solid #de974c;' +
+      'display:flex;gap:14px;align-items:center;z-index:200;box-shadow:0 6px 24px rgba(19,43,70,0.35);' +
+      'font-family:var(--font-body);font-size:13px;';
+    toast.innerHTML = 'Nova vers\u00e3o dispon\u00edvel ' +
+      '<button onclick="location.reload()" style="background:#de974c;color:#132b46;border:none;padding:6px 14px;' +
+      'border-radius:8px;font-weight:700;cursor:pointer;font-family:inherit;font-size:12px;">Atualizar</button>';
+    document.body.appendChild(toast);
+  }
+
 
   // Banner de instalação (evento beforeinstallprompt)
   let deferredPrompt = null;
