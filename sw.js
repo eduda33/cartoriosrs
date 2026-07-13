@@ -3,16 +3,16 @@
    Ao publicar uma nova versão do app, incremente VERSION abaixo —
    o app avisará o Oficial que há atualização disponível. */
 
-const VERSION = 'v2.0.0';
+const VERSION = 'v2.1.0';
 const CACHE = `cartorio-srs-${VERSION}`;
 
 const APP_SHELL = [
   './',
   'index.html',
   'manifest.json',
-  'icons/icon-192.png',
-  'icons/icon-512.png',
-  'icons/logo-branca.png'
+  'icon-192.png',
+  'icon-512.png',
+  'logo-branca.png'
 ];
 
 self.addEventListener('install', (e) => {
